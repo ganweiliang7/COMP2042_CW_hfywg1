@@ -12,7 +12,7 @@ public class CementBrick extends Brick {
     private static final Color DEF_INNER = new Color(147, 147, 147);
     private static final Color DEF_BORDER = new Color(217, 199, 175);
     private static final int CEMENT_STRENGTH = 2;
-    private static int x = 5;
+    private static int x = 55555;
     private Crack crack;
     private Shape brickFace;
 
