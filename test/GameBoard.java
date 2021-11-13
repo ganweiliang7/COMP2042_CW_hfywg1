@@ -38,12 +38,16 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     private static final int DEF_HEIGHT = 450;
 
     private static final Color BG_COLOR = Color.WHITE;
+    public static Score score;
 
     private Timer gameTimer;
 
     private Wall wall;
 
+    private Brick brick;
+
     private String message;
+    private String highScore;
 
     private boolean showPauseMenu;
 
@@ -70,18 +74,27 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
         this.initialize();
         message = "";
+        highScore="";
         wall = new Wall(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),30,3,6/2,new Point(300,430));
+        score = new Score();
 
         debugConsole = new DebugConsole(owner,wall,this);
         //initialize the first level
         wall.nextLevel();
 
+
         gameTimer = new Timer(10,e ->{
             wall.move();
             wall.findImpacts();
+
+
             message = String.format("Bricks: %d Balls %d",wall.getBrickCount(),wall.getBallCount());
+            highScore=String.format("HighScore:%d",score.returnScore());
             if(wall.isBallLost()){
                 if(wall.ballEnd()){
+                    score.addScoretoList();
+                    score.writeScore();
+                    score.ScoreReset();
                     wall.wallReset();
                     message = "Game over";
                 }
@@ -97,6 +110,9 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
                     wall.nextLevel();
                 }
                 else{
+
+                    score.addScoretoList();
+                    score.writeScore();
                     message = "ALL WALLS DESTROYED";
                     gameTimer.stop();
                 }
@@ -127,6 +143,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
         g2d.setColor(Color.BLUE);
         g2d.drawString(message,250,225);
+        g2d.drawString(highScore,250,325);
 
         drawBall(wall.ball,g2d);
 
