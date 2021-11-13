@@ -41,6 +41,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     public static Score score;
 
     private Timer gameTimer;
+    private Time time;
 
     private Wall wall;
 
@@ -48,6 +49,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
     private String message;
     private String highScore;
+    private String timeStr;
 
     private boolean showPauseMenu;
 
@@ -75,8 +77,10 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         this.initialize();
         message = "";
         highScore="";
+        timeStr = "";
         wall = new Wall(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),30,3,6/2,new Point(300,430));
         score = new Score();
+        time = new Time();
 
         debugConsole = new DebugConsole(owner,wall,this);
         //initialize the first level
@@ -84,12 +88,19 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
 
         gameTimer = new Timer(10,e ->{
+            try {
+                time.starttime();
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
             wall.move();
             wall.findImpacts();
 
 
             message = String.format("Bricks: %d Balls %d",wall.getBrickCount(),wall.getBallCount());
             highScore=String.format("HighScore:%d",score.returnScore());
+            timeStr = String.format("Time:%d:%d", time.getMinutes(), time.getSeconds());
+
             if(wall.isBallLost()){
                 if(wall.ballEnd()){
                     score.addScoretoList();
@@ -144,6 +155,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         g2d.setColor(Color.BLUE);
         g2d.drawString(message,250,225);
         g2d.drawString(highScore,250,325);
+        g2d.drawString(timeStr,425,225);
 
         drawBall(wall.ball,g2d);
 
