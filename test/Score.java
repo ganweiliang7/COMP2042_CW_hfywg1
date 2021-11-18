@@ -1,11 +1,9 @@
 package test;
-import java.io.File;
-import java.io.FileWriter;  // Import the File class
-import java.io.IOException;
-import java.io.Writer;
+
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Scanner;
 
 public class Score {
     ArrayList<Integer> scores = new ArrayList<>();
@@ -59,6 +57,25 @@ public class Score {
     {
         if(checkFileExist("Score.txt"))
         {
+            try (Scanner scanner = new Scanner(new File("Score.txt")).useDelimiter("\\s*-\\s*"))
+            {
+                // \\s* in regular expressions means "any number or whitespaces".
+                // We could've said simply useDelimiter("-") and Scanner would have
+                // included the whitespaces as part of the data it extracted.
+                while (scanner.hasNextLine()) {
+                    String currLine = scanner.nextLine();
+                    if (currLine != null && currLine.trim().length() > 0 && currLine.matches("^[0-9]*$"))
+                        scores.add(Integer.parseInt(currLine));
+                }
+            }
+
+            catch (FileNotFoundException e)
+            {
+                // Handle the potential exception
+            }
+
+
+
             Collections.sort(scores,Collections.reverseOrder());
             try
             {
