@@ -101,8 +101,10 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
             highScore=String.format("HighScore:%d",score.returnScore());
             timeStr = String.format("Time:%02d:%02d", time.getMinutes(), time.getSeconds());
 
-            if(wall.isBallLost()){
-                if(wall.ballEnd()){
+            if(wall.isBallLost())
+            {
+                if(wall.ballEnd())
+                {
                     score.addScoretoList();
                     score.writeScore();
                     score.ScoreReset();

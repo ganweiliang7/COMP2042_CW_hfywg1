@@ -24,11 +24,7 @@ import java.util.Random;
 
 public class Wall {
 
-    private static final int LEVELS_COUNT = 4;
 
-    private static final int CLAY = 1;
-    private static final int STEEL = 2;
-    private static final int CEMENT = 3;
 
     private Random rnd;
     private Rectangle area;
@@ -62,12 +58,21 @@ public class Wall {
 
         makeBall(ballPos);
         int speedX,speedY;
-        do{
-            speedX = rnd.nextInt(5) - 2;
-        }while(speedX == 0);
-        do{
-            speedY = -rnd.nextInt(3);
-        }while(speedY == 0);
+
+        if(level == 5)
+        {
+            speedX = 5;
+            speedY = -5;
+        }
+        else
+        {
+            do {
+                speedX = rnd.nextInt(5) - 2;
+            } while (speedX == 0);
+            do {
+                speedY = -rnd.nextInt(3);
+            } while (speedY == 0);
+        }
 
         ball.setSpeed(speedX,speedY);
 
@@ -98,6 +103,7 @@ public class Wall {
             /*for efficiency reverse is done into method impactWall
              * because for every brick program checks for horizontal and vertical impacts
              */
+
             brickCount--;
             GameBoard.score.incrementScore(10);
 
@@ -116,23 +122,24 @@ public class Wall {
 
     private boolean impactWall()
     {
+
         for(Brick b : bricks){
             switch(b.findImpact(ball)) {
                 //Vertical Impact
                 case Brick.UP_IMPACT:
                     ball.reverseY();
-                    return b.setImpact(ball.down, Brick.Crack.UP);
+                    return b.setImpact(ball.down, Crack.UP);
                 case Brick.DOWN_IMPACT:
                     ball.reverseY();
-                    return b.setImpact(ball.up,Brick.Crack.DOWN);
+                    return b.setImpact(ball.up,Crack.DOWN);
 
                 //Horizontal Impact
                 case Brick.LEFT_IMPACT:
                     ball.reverseX();
-                    return b.setImpact(ball.right,Brick.Crack.RIGHT);
+                    return b.setImpact(ball.right,Crack.RIGHT);
                 case Brick.RIGHT_IMPACT:
                     ball.reverseX();
-                    return b.setImpact(ball.left,Brick.Crack.LEFT);
+                    return b.setImpact(ball.left,Crack.LEFT);
             }
         }
         return false;
@@ -155,19 +162,31 @@ public class Wall {
         return ballLost;
     }
 
-    public void ballReset(){
+    public void ballReset()
+    {
         player.moveTo(startPoint);
         ball.moveTo(startPoint);
         int speedX,speedY;
-        do{
-            speedX = rnd.nextInt(5) - 2;
-        }while(speedX == 0);
-        do{
-            speedY = -rnd.nextInt(3);
-        }while(speedY == 0);
+        System.out.println(level);
+        if(level == 5)
+        {
+            speedX = 5;
+            speedY = -5;
+        }
+        else
+        {
+            do {
+                speedX = rnd.nextInt(5) - 2;
+            } while (speedX == 0);
+            do {
+                speedY = -rnd.nextInt(3);
+            } while (speedY == 0);
+        }
 
         ball.setSpeed(speedX,speedY);
         ballLost = false;
+        System.out.println(ball.getSpeedX());
+        System.out.println(ball.getSpeedY());
     }
 
     public void wallReset(){
@@ -186,8 +205,11 @@ public class Wall {
         return brickCount == 0;
     }
 
-    public void nextLevel(){
+    public void nextLevel()
+    {
+
         bricks = levels[level++];
+
         this.brickCount = bricks.length;
     }
 
