@@ -1,14 +1,12 @@
 package test;
 
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
 
 public class Time {
     public int centiseconds = 0;
     public int seconds = 0;
     public int minutes = 0;
+    ArrayList<String> times = new ArrayList<>();
 
     public void starttime() throws InterruptedException
     {
@@ -27,7 +25,13 @@ public class Time {
 
     }
 
+    public void reset()
+    {
+        minutes = 0;
+        seconds = 0;
 
+
+    }
     public int getMinutes()
     {
         return minutes;
