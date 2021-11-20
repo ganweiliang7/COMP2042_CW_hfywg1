@@ -28,13 +28,15 @@ public class CementBrick extends Brick {
     }
 
     @Override
-    public boolean setImpact(Point2D point, int dir) {
+    public boolean setImpact(Point2D point, int dir)
+    {
         if(super.isBroken())
             return false;
         super.impact();
         if(!super.isBroken()){
             crack.makeCrack(point,dir);
             updateBrick();
+            GameBoard.score.incrementScore(10);
             return false;
         }
         return true;

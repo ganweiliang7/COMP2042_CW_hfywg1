@@ -59,6 +59,7 @@ public class SteelBrick extends Brick {
 
     public void impact(){
         if(rnd.nextDouble() < STEEL_PROBABILITY){
+            GameBoard.score.incrementScore(20);
             super.impact();
         }
     }
