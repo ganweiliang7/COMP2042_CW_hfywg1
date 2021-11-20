@@ -37,13 +37,13 @@ public class Levels {
             double x = (i % brickOnLine) * brickLen;
             x =(line % 2 == 0) ? x : (x - (brickLen / 2));
             double y = (line) * brickHgt;
-            p.setLocation(x,y);
+            p.setLocation(x,y+20);
             tmp[i] = makeBrick(p,brickSize,type);
         }
 
         for(double y = brickHgt;i < tmp.length;i++, y += 2*brickHgt){
             double x = (brickOnLine * brickLen) - (brickLen / 2);
-            p.setLocation(x,y);
+            p.setLocation(x,y+20);
             tmp[i] = new ClayBrick(p,brickSize);
         }
         return tmp;
@@ -81,7 +81,7 @@ public class Levels {
             double x = posX * brickLen;
             x =(line % 2 == 0) ? x : (x - (brickLen / 2));
             double y = (line) * brickHgt;
-            p.setLocation(x,y);
+            p.setLocation(x,y+20);
 
             boolean b = ((line % 2 == 0 && i % 2 == 0) || (line % 2 != 0 && posX > centerLeft && posX <= centerRight));
             tmp[i] = b ?  makeBrick(p,brickSize,typeA) : makeBrick(p,brickSize,typeB);
@@ -89,7 +89,7 @@ public class Levels {
 
         for(double y = brickHgt;i < tmp.length;i++, y += 2*brickHgt){
             double x = (brickOnLine * brickLen) - (brickLen / 2);
-            p.setLocation(x,y);
+            p.setLocation(x,y+20);
             tmp[i] = makeBrick(p,brickSize,typeA);
         }
         return tmp;

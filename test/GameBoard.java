@@ -107,6 +107,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
                     score.writeScore();
                     score.ScoreReset();
                     wall.wallReset();
+                    time.reset();
                     message = "Game over";
                 }
                 wall.ballReset();
@@ -124,6 +125,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
                     score.addScoretoList();
                     score.writeScore();
+                    time.reset();
                     message = "ALL WALLS DESTROYED";
                     gameTimer.stop();
                 }
@@ -151,11 +153,11 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         Graphics2D g2d = (Graphics2D) g;
 
         clear(g2d);
-
+        g2d.setFont(new Font("Times Roman", Font.BOLD,17));
         g2d.setColor(Color.BLUE);
-        g2d.drawString(message,250,225);
-        g2d.drawString(highScore,250,325);
-        g2d.drawString(timeStr,425,225);
+        g2d.drawString(message,0,15);
+        g2d.drawString(highScore,250,15);
+        g2d.drawString(timeStr,500,15);
 
         drawBall(wall.ball,g2d);
 
