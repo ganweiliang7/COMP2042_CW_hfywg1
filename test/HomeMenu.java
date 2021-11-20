@@ -300,7 +300,12 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
             System.out.println("Goodbye " + System.getProperty("user.name"));
             System.exit(0);
         }
-        
+        else if(highscoreButton.contains(p))
+        {
+            owner.enableHighScoreMenu();
+
+        }
+
 
 
     }

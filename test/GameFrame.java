@@ -16,13 +16,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package test;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-import java.awt.event.WindowListener;
 
 
 public class GameFrame extends JFrame implements WindowFocusListener {
@@ -31,6 +28,7 @@ public class GameFrame extends JFrame implements WindowFocusListener {
 
     private GameBoard gameBoard;
     private HomeMenu homeMenu;
+    private HighScoreMenu highScoreMenu;
 
     private boolean gaming;
 
@@ -40,6 +38,7 @@ public class GameFrame extends JFrame implements WindowFocusListener {
         gaming = false;
 
         this.setLayout(new BorderLayout());
+        highScoreMenu = new HighScoreMenu();
 
         gameBoard = new GameBoard(this);
 
@@ -58,6 +57,16 @@ public class GameFrame extends JFrame implements WindowFocusListener {
         this.pack();
         this.autoLocate();
         this.setVisible(true);
+    }
+
+    public void enableHighScoreMenu()
+    {
+
+        this.remove(homeMenu);
+        this.repaint();
+        highScoreMenu.showHighScoreMenu(this);
+
+
     }
 
     public void enableGameBoard(){
