@@ -50,6 +50,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     private String message;
     private String highScore;
     private String timeStr;
+    private WallController wallController = new WallController();
 
     private boolean showPauseMenu;
 
@@ -81,10 +82,11 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         wall = new Wall(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),30,3,6/2,new Point(300,430));
         score = new Score();
         time = new Time();
+        WallController wallController = new WallController();
 
-        debugConsole = new DebugConsole(owner,wall,this);
+        debugConsole = new DebugConsole(owner,wallController,this);
         //initialize the first level
-        wall.nextLevel();
+        wallController.nextLevel();
 
 
         gameTimer = new Timer(10,e ->{
@@ -108,7 +110,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
                     score.addScoretoList();
                     score.writeScore();
                     score.ScoreReset();
-                    wall.wallReset();
+                    wallController.wallReset();
                     time.reset();
                     message = "Game over";
                 }
@@ -120,8 +122,8 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
                     message = "Go to Next Level";
                     gameTimer.stop();
                     wall.ballReset();
-                    wall.wallReset();
-                    wall.nextLevel();
+                    wallController.wallReset();
+                    wallController.nextLevel();
                 }
                 else{
 
@@ -346,7 +348,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         else if(restartButtonRect.contains(p)){
             message = "Restarting Game...";
             wall.ballReset();
-            wall.wallReset();
+            wallController.wallReset();
             showPauseMenu = false;
             repaint();
         }

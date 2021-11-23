@@ -35,9 +35,9 @@ public class DebugPanel extends JPanel {
     private JSlider ballXSpeed;
     private JSlider ballYSpeed;
 
-    private Wall wall;
+    private WallController wall;
 
-    public DebugPanel(Wall wall){
+    public DebugPanel(WallController wall){
 
         this.wall = wall;
 

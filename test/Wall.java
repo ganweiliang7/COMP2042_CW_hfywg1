@@ -25,24 +25,24 @@ import java.util.Random;
 public class Wall {
 
 
-
+    public static Ball ball;
     private Random rnd;
     private Rectangle area;
 
 
-    Brick[] bricks;
+    static Brick[] bricks;
     Score score = new Score();
-    Ball ball;
     Player player;
     Levels lvl = new Levels();
-    private Brick[][] levels;
+    public static Brick[][] levels;
 
-    private int level;
+    public static int level;
 
     private Point startPoint;
-    private int brickCount;
-    private int ballCount;
+    public static int brickCount;
+    public static int ballCount;
     private boolean ballLost;
+    WallController wallController = new WallController();
 
     public Wall(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos){
 
@@ -99,7 +99,7 @@ public class Wall {
         if(player.impact(ball)){
             ball.reverseY();
         }
-        else if(impactWall()){
+        else if(wallController.impactWall()){
             /*for efficiency reverse is done into method impactWall
              * because for every brick program checks for horizontal and vertical impacts
              */
@@ -120,30 +120,7 @@ public class Wall {
         }
     }
 
-    private boolean impactWall()
-    {
 
-        for(Brick b : bricks){
-            switch(b.findImpact(ball)) {
-                //Vertical Impact
-                case Brick.UP_IMPACT:
-                    ball.reverseY();
-                    return b.setImpact(ball.down, Crack.UP);
-                case Brick.DOWN_IMPACT:
-                    ball.reverseY();
-                    return b.setImpact(ball.up,Crack.DOWN);
-
-                //Horizontal Impact
-                case Brick.LEFT_IMPACT:
-                    ball.reverseX();
-                    return b.setImpact(ball.right,Crack.RIGHT);
-                case Brick.RIGHT_IMPACT:
-                    ball.reverseX();
-                    return b.setImpact(ball.left,Crack.LEFT);
-            }
-        }
-        return false;
-    }
 
     private boolean impactBorder(){
         Point2D p = ball.getPosition();
@@ -189,12 +166,7 @@ public class Wall {
         System.out.println(ball.getSpeedY());
     }
 
-    public void wallReset(){
-        for(Brick b : bricks)
-            b.repair();
-        brickCount = bricks.length;
-        ballCount = 3;
-    }
+
 
 
     public boolean ballEnd(){
@@ -205,29 +177,13 @@ public class Wall {
         return brickCount == 0;
     }
 
-    public void nextLevel()
-    {
 
-        bricks = levels[level++];
-
-        this.brickCount = bricks.length;
-    }
 
     public boolean hasLevel(){
         return level < levels.length;
     }
 
-    public void setBallXSpeed(int s){
-        ball.setXSpeed(s);
-    }
 
-    public void setBallYSpeed(int s){
-        ball.setYSpeed(s);
-    }
-
-    public void resetBallCount(){
-        ballCount = 3;
-    }
 
 
 
