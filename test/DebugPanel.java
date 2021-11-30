@@ -21,7 +21,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
-
+import java.util.Hashtable;
 
 
 public class DebugPanel extends JPanel {
@@ -35,9 +35,15 @@ public class DebugPanel extends JPanel {
     private JSlider ballXSpeed;
     private JSlider ballYSpeed;
 
+    private JLabel ballXSpeedLabel;
+    private JLabel ballYSpeedLabel;
+
     private WallController wall;
 
     public DebugPanel(WallController wall){
+
+
+
 
         this.wall = wall;
 
@@ -46,14 +52,17 @@ public class DebugPanel extends JPanel {
         skipLevel = makeButton("Skip Level",e -> wall.nextLevel());
         resetBalls = makeButton("Reset Balls",e -> wall.resetBallCount());
 
-        ballXSpeed = makeSlider(-4,4,e -> wall.setBallXSpeed(ballXSpeed.getValue()));
-        ballYSpeed = makeSlider(-4,4,e -> wall.setBallYSpeed(ballYSpeed.getValue()));
+        ballXSpeed = makeXSlider(-4,4,e -> wall.setBallXSpeed(ballXSpeed.getValue()));
+        ballYSpeed = makeYSlider(-4,4,e -> wall.setBallYSpeed(ballYSpeed.getValue()));
+
+
 
         this.add(skipLevel);
         this.add(resetBalls);
 
         this.add(ballXSpeed);
         this.add(ballYSpeed);
+
 
     }
 
@@ -68,14 +77,39 @@ public class DebugPanel extends JPanel {
         return  out;
     }
 
-    private JSlider makeSlider(int min, int max, ChangeListener e){
+    private JSlider makeXSlider(int min, int max, ChangeListener e){
         JSlider out = new JSlider(min,max);
         out.setMajorTickSpacing(1);
         out.setSnapToTicks(true);
         out.setPaintTicks(true);
         out.addChangeListener(e);
+        Hashtable<Integer, JLabel> labels = new Hashtable<>();
+        labels.put(min, new JLabel("-4"));
+        labels.put(0, new JLabel("BallXSpeed"));
+        labels.put(max, new JLabel("4"));
+        out.setLabelTable(labels);
+
+        out.setPaintLabels(true);
+
         return out;
     }
+    private JSlider makeYSlider(int min, int max, ChangeListener e){
+        JSlider out = new JSlider(min,max);
+        out.setMajorTickSpacing(1);
+        out.setSnapToTicks(true);
+        out.setPaintTicks(true);
+        out.addChangeListener(e);
+        Hashtable<Integer, JLabel> labels = new Hashtable<>();
+        labels.put(min, new JLabel("-4"));
+        labels.put(0, new JLabel("BallYSpeed"));
+        labels.put(max, new JLabel("4"));
+        out.setLabelTable(labels);
+
+        out.setPaintLabels(true);
+
+        return out;
+    }
+
 
     public void setValues(int x,int y){
         ballXSpeed.setValue(x);

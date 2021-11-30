@@ -27,16 +27,13 @@ public class DebugConsole extends JDialog implements WindowListener{
     private static final String TITLE = "Debug Console";
 
 
-    private JFrame owner;
-    private DebugPanel debugPanel;
-    private GameBoard gameBoard;
-    private WallController wallcontroller;
-
+    private final JFrame owner;
+    private final DebugPanel debugPanel;
+    private final GameBoard gameBoard;
 
 
     public DebugConsole(JFrame owner,WallController wall,GameBoard gameBoard){
 
-        this.wallcontroller = wall;
         this.owner = owner;
         this.gameBoard = gameBoard;
 
@@ -44,9 +41,9 @@ public class DebugConsole extends JDialog implements WindowListener{
 
         debugPanel = new DebugPanel(wall);
         this.add(debugPanel,BorderLayout.CENTER);
-
-
         this.pack();
+
+
     }
 
     private void initialize(){
