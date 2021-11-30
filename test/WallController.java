@@ -7,11 +7,11 @@ public class WallController
 
 
     public void setBallXSpeed(int s){
-        Wall.ball.setXSpeed(s);
+        Wall.ballController.setXSpeed(s);
     }
 
     public void setBallYSpeed(int s){
-        Wall.ball.setYSpeed(s);
+        Wall.ballController.setYSpeed(s);
     }
 
     public void resetBallCount(){
@@ -24,7 +24,13 @@ public class WallController
         Wall.bricks = Wall.levels[Wall.level++];
 
         Wall.brickCount = Wall.bricks.length;
+        if(Wall.level == 5)
+        {
+            Wall.ballController.setSpeed(5,-5);
+        }
     }
+
+
     public void wallReset(){
         for(Brick b : Wall.bricks)
             b.repair();
@@ -38,18 +44,18 @@ public class WallController
             switch(b.findImpact(Wall.ball)) {
                 //Vertical Impact
                 case Brick.UP_IMPACT:
-                    Wall.ball.reverseY();
+                    Wall.ballController.reverseY();
                     return b.setImpact(Wall.ball.down, Crack.UP);
                 case Brick.DOWN_IMPACT:
-                    Wall.ball.reverseY();
+                    Wall.ballController.reverseY();
                     return b.setImpact(Wall.ball.up,Crack.DOWN);
 
                 //Horizontal Impact
                 case Brick.LEFT_IMPACT:
-                    Wall.ball.reverseX();
+                    Wall.ballController.reverseX();
                     return b.setImpact(Wall.ball.right,Crack.RIGHT);
                 case Brick.RIGHT_IMPACT:
-                    Wall.ball.reverseX();
+                    Wall.ballController.reverseX();
                     return b.setImpact(Wall.ball.left,Crack.LEFT);
             }
         }

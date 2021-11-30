@@ -42,7 +42,10 @@ public class Wall {
     public static int brickCount;
     public static int ballCount;
     private boolean ballLost;
-    WallController wallController = new WallController();
+    public static WallController wallController = new WallController();
+    public static BallController ballController = new BallController();
+    public static PlayerController playerController = new PlayerController();
+
 
     public Wall(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos){
 
@@ -74,14 +77,16 @@ public class Wall {
             } while (speedY == 0);
         }
 
-        ball.setSpeed(speedX,speedY);
+        ballController.setSpeed(speedX,speedY);
 
         player = new Player((Point) ballPos.clone(),150,10, drawArea);
 
         area = drawArea;
+        
 
 
     }
+
 
 
     private void makeBall(Point2D ballPos){
@@ -91,13 +96,13 @@ public class Wall {
 
 
     public void move(){
-        player.move();
+        playerController.move();
         ball.move();
     }
 
     public void findImpacts(){
         if(player.impact(ball)){
-            ball.reverseY();
+            ballController.reverseY();
         }
         else if(wallController.impactWall()){
             /*for efficiency reverse is done into method impactWall
@@ -109,10 +114,10 @@ public class Wall {
 
         }
         else if(impactBorder()) {
-            ball.reverseX();
+            ballController.reverseX();
         }
         else if(ball.getPosition().getY() < area.getY()){
-            ball.reverseY();
+            ballController.reverseY();
         }
         else if(ball.getPosition().getY() > area.getY() + area.getHeight()){
             ballCount--;
@@ -141,10 +146,10 @@ public class Wall {
 
     public void ballReset()
     {
-        player.moveTo(startPoint);
-        ball.moveTo(startPoint);
+        playerController.moveTo(startPoint);
+        ballController.moveTo(startPoint);
         int speedX,speedY;
-        System.out.println(level);
+
         if(level == 5)
         {
             speedX = 5;
@@ -160,10 +165,9 @@ public class Wall {
             } while (speedY == 0);
         }
 
-        ball.setSpeed(speedX,speedY);
+        ballController.setSpeed(speedX,speedY);
         ballLost = false;
-        System.out.println(ball.getSpeedX());
-        System.out.println(ball.getSpeedY());
+
     }
 
 
