@@ -21,8 +21,12 @@ public class Score {
 
         return totalscore;
     }
-    public void addScoretoList()
+    public void addScoretoList(int minutes,int seconds)
     {
+        int totalsec = minutes * 60 + seconds;
+
+        totalscore = (int) Math.round(totalscore * (1800 - totalsec) * 0.01);
+
         scores.add(totalscore);
     }
     public void incrementScore(int score)

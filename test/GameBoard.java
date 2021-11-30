@@ -52,6 +52,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     private String timeStr;
     private WallController wallController = new WallController();
 
+
     private boolean showPauseMenu;
 
     private Font menuFont;
@@ -107,7 +108,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
             {
                 if(wall.ballEnd())
                 {
-                    score.addScoretoList();
+                    score.addScoretoList(time.getMinutes(),time.getSeconds());
                     score.writeScore();
                     score.ScoreReset();
                     wallController.wallReset();
@@ -127,7 +128,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
                 }
                 else{
 
-                    score.addScoretoList();
+                    score.addScoretoList(time.getMinutes(),time.getSeconds());
                     score.writeScore();
                     time.reset();
                     message = "ALL WALLS DESTROYED";
@@ -163,9 +164,9 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         g2d.drawString(highScore,250,15);
         g2d.drawString(timeStr,500,15);
 
-        drawBall(wall.ball,g2d);
+        drawBall(Wall.ball,g2d);
 
-        for(Brick b : wall.bricks)
+        for(Brick b : Wall.bricks)
             if(!b.isBroken())
                 drawBrick(b,g2d);
 
@@ -306,10 +307,10 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     public void keyPressed(KeyEvent keyEvent) {
         switch(keyEvent.getKeyCode()){
             case KeyEvent.VK_A:
-                wall.player.moveLeft();
+                Wall.playerController.moveLeft();
                 break;
             case KeyEvent.VK_D:
-                wall.player.movRight();
+                Wall.playerController.movRight();
                 break;
             case KeyEvent.VK_ESCAPE:
                 showPauseMenu = !showPauseMenu;
