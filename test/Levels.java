@@ -132,7 +132,7 @@ public class Levels {
                 break;
             double x = (i % brickOnLine) * brickLen;
             x =(line % 2 == 0) ? x : (x - (brickLen / 2));
-            double y = (line) * brickHgt;
+            double y = (line) * brickHgt*5;
             p.setLocation(x,y+20);
             tmp[i] = makeBrick(p,brickSize,type);
         }
@@ -140,7 +140,7 @@ public class Levels {
 
         for(double y = brickHgt;i < tmp.length;i++, y += 2*brickHgt){
             double x = (brickOnLine * brickLen) - (brickLen / 2);
-            p.setLocation(x,y+20);
+            p.setLocation(x,5*y+20);
             tmp[i] = new SteelBrick(p,brickSize);
         }
         return tmp;
