@@ -18,23 +18,21 @@
 package test;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 
 public class Player {
 
 
     public static final Color BORDER_COLOR = Color.GREEN.darker().darker();
-    public static final Color INNER_COLOR = Color.GREEN;
+    public static final Color INNER_COLOR = Color.CYAN;
 
-    private static final int DEF_MOVE_AMOUNT = 5;
+    public static final int DEF_MOVE_AMOUNT = 5;
 
-    private Rectangle playerFace;
-    private Point ballPoint;
-    private int moveAmount;
-    private int min;
-    private int max;
+    public static Rectangle playerFace;
+    public static Point ballPoint;
+    public static int moveAmount;
+    public static int min;
+    public static int max;
 
 
     public Player(Point ballPoint,int width,int height,Rectangle container) {
@@ -52,24 +50,10 @@ public class Player {
     }
 
     public boolean impact(Ball b){
-        return playerFace.contains(b.getPosition()) && playerFace.contains(b.down) ;
+        return playerFace.contains(b.getPosition()) && playerFace.contains(Ball.down) ;
     }
 
-    public void move(){
-        double x = ballPoint.getX() + moveAmount;
-        if(x < min || x > max)
-            return;
-        ballPoint.setLocation(x,ballPoint.getY());
-        playerFace.setLocation(ballPoint.x - (int)playerFace.getWidth()/2,ballPoint.y);
-    }
 
-    public void moveLeft(){
-        moveAmount = -DEF_MOVE_AMOUNT;
-    }
-
-    public void movRight(){
-        moveAmount = DEF_MOVE_AMOUNT;
-    }
 
     public void stop(){
         moveAmount = 0;
@@ -79,8 +63,5 @@ public class Player {
         return  playerFace;
     }
 
-    public void moveTo(Point p){
-        ballPoint.setLocation(p);
-        playerFace.setLocation(ballPoint.x - (int)playerFace.getWidth()/2,ballPoint.y);
-    }
+
 }
