@@ -21,11 +21,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.font.FontRenderContext;
-
-
-
-public class GameBoard extends JComponent implements KeyListener,MouseListener,MouseMotionListener {
-
+import java.util.Random;
+public class GameBoard extends JComponent implements KeyListener, MouseListener, MouseMotionListener
+{
     private static final String CONTINUE = "Continue";
     private static final String RESTART = "Restart";
     private static final String EXIT = "Exit";
@@ -36,35 +34,35 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
     private static final int DEF_WIDTH = 600;
     private static final int DEF_HEIGHT = 450;
+    private double randNum;
 
     private static final Color BG_COLOR = Color.WHITE;
     public static Score score;
 
-    private Timer gameTimer;
+    public Timer gameTimer;
     private Time time;
 
-    private Wall wall;
+    public Wall wall;
 
     private Brick brick;
-
-    private String message;
+    private Random rnd;
+    public String message;
     private String highScore;
     private String timeStr;
-    private WallController wallController = new WallController();
+    public WallController wallController = new WallController();
+    private GameBoardController gameBoardController;
 
 
-    private boolean showPauseMenu;
+    public boolean showPauseMenu;
 
     private Font menuFont;
 
-    private Rectangle continueButtonRect;
-    private Rectangle exitButtonRect;
-    private Rectangle restartButtonRect;
+    public Rectangle continueButtonRect;
+    public Rectangle exitButtonRect;
+    public Rectangle restartButtonRect;
     private int strLen;
 
-    private DebugConsole debugConsole;
-
-
+    public DebugConsole debugConsole;
     public GameBoard(JFrame owner){
         super();
 
@@ -83,7 +81,9 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         wall = new Wall(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),30,3,6/2,new Point(300,430));
         score = new Score();
         time = new Time();
+        rnd = new Random();
         WallController wallController = new WallController();
+        gameBoardController = new GameBoardController();
 
         debugConsole = new DebugConsole(owner,wallController,this);
         //initialize the first level
@@ -91,13 +91,14 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
 
         gameTimer = new Timer(10,e ->{
+
             try {
                 time.starttime();
             } catch (InterruptedException interruptedException) {
                 interruptedException.printStackTrace();
             }
-            wall.move();
-            wall.findImpacts();
+            wallController.move();
+            wallController.findImpacts();
 
 
             message = String.format("Bricks: %d Balls %d",wall.getBrickCount(),wall.getBallCount());
@@ -115,14 +116,14 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
                     time.reset();
                     message = "Game over";
                 }
-                wall.ballReset();
+                wallController.ballReset();
                 gameTimer.stop();
             }
             else if(wall.isDone()){
                 if(wall.hasLevel()){
                     message = "Go to Next Level";
                     gameTimer.stop();
-                    wall.ballReset();
+                    wallController.ballReset();
                     wallController.wallReset();
                     wallController.nextLevel();
                 }
@@ -141,9 +142,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
     }
 
-
-
-    private void initialize(){
+    void initialize(){
         this.setPreferredSize(new Dimension(DEF_WIDTH,DEF_HEIGHT));
         this.setFocusable(true);
         this.requestFocusInWindow();
@@ -151,6 +150,11 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
     }
+
+
+
+
+
 
 
     public void paint(Graphics g){
@@ -305,31 +309,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-        switch(keyEvent.getKeyCode()){
-            case KeyEvent.VK_A:
-                Wall.playerController.moveLeft();
-                break;
-            case KeyEvent.VK_D:
-                Wall.playerController.movRight();
-                break;
-            case KeyEvent.VK_ESCAPE:
-                showPauseMenu = !showPauseMenu;
-                repaint();
-                gameTimer.stop();
-                break;
-            case KeyEvent.VK_SPACE:
-                if(!showPauseMenu)
-                    if(gameTimer.isRunning())
-                        gameTimer.stop();
-                    else
-                        gameTimer.start();
-                break;
-            case KeyEvent.VK_F1:
-                if(keyEvent.isAltDown() && keyEvent.isShiftDown())
-                    debugConsole.setVisible(true);
-            default:
-                wall.player.stop();
-        }
+        gameBoardController.controllerKeyPressed(keyEvent,this);
     }
 
     @Override
@@ -339,23 +319,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-        Point p = mouseEvent.getPoint();
-        if(!showPauseMenu)
-            return;
-        if(continueButtonRect.contains(p)){
-            showPauseMenu = false;
-            repaint();
-        }
-        else if(restartButtonRect.contains(p)){
-            message = "Restarting Game...";
-            wall.ballReset();
-            wallController.wallReset();
-            showPauseMenu = false;
-            repaint();
-        }
-        else if(exitButtonRect.contains(p)){
-            System.exit(0);
-        }
+        gameBoardController.controllerMouseCLicked(mouseEvent,this);
 
     }
 
@@ -386,16 +350,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
-        Point p = mouseEvent.getPoint();
-        if(exitButtonRect != null && showPauseMenu) {
-            if (exitButtonRect.contains(p) || continueButtonRect.contains(p) || restartButtonRect.contains(p))
-                this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            else
-                this.setCursor(Cursor.getDefaultCursor());
-        }
-        else{
-            this.setCursor(Cursor.getDefaultCursor());
-        }
+        gameBoardController.controllerMouseMoved(mouseEvent,this);
     }
 
     public void onLostFocus(){
