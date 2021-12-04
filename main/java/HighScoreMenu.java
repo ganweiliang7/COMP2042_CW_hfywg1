@@ -1,9 +1,12 @@
-package test;
+package main.java;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,13 +15,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class HighScoreMenu extends JComponent implements ActionListener, MouseMotionListener {
-    Font f1 = new Font(Font.DIALOG, Font.BOLD, 20);
+    Font titlefont = new Font(Font.DIALOG, Font.BOLD, 30);
     Font f2 = new Font(Font.DIALOG, Font.BOLD, 15);
-    Color textareaColour = new Color(200,100,0);
+    Color textareaColour = new Color(0,0,0);
 
 
     private JButton backbutton;
-    private HomeMenu homeMenu;
     private GameFrame gameFrame;
 
     ArrayList<Integer> scores = new ArrayList<>();
@@ -42,7 +44,8 @@ public class HighScoreMenu extends JComponent implements ActionListener, MouseMo
    {
        this.gameFrame = frame;
        BufferedImage homeMenuImage = null;
-       String pathtoWallpaper = "resource/HighScoreMenuWallpaper.jpg";
+       // read from the file
+       String pathtoWallpaper = "src/main/resources/HighScoreMenuWallpaper.jpg";
        try
        {
            homeMenuImage = ImageIO.read(new File(pathtoWallpaper));
@@ -60,11 +63,11 @@ public class HighScoreMenu extends JComponent implements ActionListener, MouseMo
        frame.setLayout(null);
        frame.setSize(500, 450);
        frame.setContentPane(new ImagePanel(homeMenuImage));
-       drawComponent(frame);
+       drawComponent(frame);//function to call functions to draw the buttons,labels and text areas
        JLabel Title = new JLabel("HighScore");
-       Title.setBounds(150,50,100,50);
-       Title.setForeground(Color.white);
-       Title.setFont(f1);
+       Title.setBounds(150,20,200,50);
+       Title.setForeground(Color.BLACK);
+       Title.setFont(titlefont);
        frame.add(Title);
        frame.setVisible(true);
    }
@@ -77,30 +80,31 @@ public class HighScoreMenu extends JComponent implements ActionListener, MouseMo
 
 
     }
-    public void drawTextArea(GameFrame frame)
+    public void drawTextArea(GameFrame frame) // text area that contains the top 7 scores read from the file Score.txt
     {
         JTextArea txtarea = new JTextArea();
         txtarea.setBounds(150, 90, 172, 339);
         displayScore(txtarea);
         frame.add(txtarea);
         txtarea.setFont(new Font(Font.DIALOG, Font.BOLD,20));
-        txtarea.setBackground(new Color(0,50,50,150));
+        txtarea.setOpaque(false);
         txtarea.setForeground(textareaColour);
 
     }
-    public void drawButton(JFrame frame)
+    public void drawButton(JFrame frame) //draw the back button at the top left corner of highscore menu
     {
         backbutton = new JButton("Back");
         backbutton.setForeground(textareaColour);
+        backbutton.setForeground(new Color(255,255,255));
         backbutton.setBounds(0, 0, 100, 50);
         backbutton.addActionListener(this);
 
-        backbutton.setBackground(new Color(0,50,50,150));
+        backbutton.setBackground(new Color(0,0,0));
 
         frame.add(backbutton);
 
     }
-    public void drawIndex(JFrame frame)
+    public void drawIndex(JFrame frame) // draw index (1-7) for the highscores
     {
         JLabel index1 = new JLabel("1");
         JLabel index2 = new JLabel("2");
@@ -110,7 +114,7 @@ public class HighScoreMenu extends JComponent implements ActionListener, MouseMo
         JLabel index6 = new JLabel("6");
         JLabel index7 = new JLabel("7");
 
-        index1.setBounds(140,97,10,10);
+
         index1.setFont(f2);
         index2.setFont(f2);
         index3.setFont(f2);
@@ -118,6 +122,7 @@ public class HighScoreMenu extends JComponent implements ActionListener, MouseMo
         index5.setFont(f2);
         index6.setFont(f2);
         index7.setFont(f2);
+        index1.setBounds(140,97,10,10);
         index2.setBounds(140,150,10,15);
         index3.setBounds(140,203,10,15);
         index4.setBounds(140,255,10,15);
@@ -131,10 +136,18 @@ public class HighScoreMenu extends JComponent implements ActionListener, MouseMo
         frame.add(index5);
         frame.add(index6);
         frame.add(index7);
+        index1.setForeground(Color.BLACK);
+        index2.setForeground(Color.BLACK);
+        index3.setForeground(Color.BLACK);
+        index4.setForeground(Color.BLACK);
+        index5.setForeground(Color.BLACK);
+        index6.setForeground(Color.BLACK);
+        index7.setForeground(Color.BLACK);
+
 
     }
 
-   public void displayScore(JTextArea txtarea)
+   public void displayScore(JTextArea txtarea) //function to display score at the textarea
    {
        try (Scanner scanner = new Scanner(new File("Score.txt")).useDelimiter("\\s*-\\s*"))
        {
@@ -143,11 +156,11 @@ public class HighScoreMenu extends JComponent implements ActionListener, MouseMo
            // included the whitespaces as part of the data it extracted.
            while (scanner.hasNextLine()) {
 
-               String currLine = scanner.nextLine();
-               if (currLine != null && currLine.trim().length() > 0 && currLine.matches("^[0-9]*$"))
+               String currLine = scanner.nextLine();// scanner read file line by line
+               if (currLine != null && currLine.trim().length() > 0 && currLine.matches("^[0-9]*$"))//scanner reads integer
                {
 
-                   scores.add(Integer.parseInt(currLine));
+                   scores.add(Integer.parseInt(currLine)); // add the integers to an arraylist - scores
                }
 
            }
@@ -162,7 +175,7 @@ public class HighScoreMenu extends JComponent implements ActionListener, MouseMo
        {
 
 
-           txtarea.append("   "+ Integer.toString(a) + "\n\n");
+           txtarea.append("   "+ Integer.toString(a) + "\n\n");// append the scores to textarea
 
 
 
