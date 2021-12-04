@@ -1,4 +1,4 @@
-package test;
+package main.java;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -28,14 +28,15 @@ public class InstructionMenu implements ActionListener {
     }
 
 
-
-
-
+    /**
+     *This method sets the frame size, load background image and call the methods for drawing the components in instruction menu
+     * @param frame <- the original frame used by GameFrame
+     */
     public void showinstructions(GameFrame frame)
     {
         gameFrame = frame;
         BufferedImage InstructionMenuImage = null;
-        String pathtoWallpaper = "resource/InstructionMenuWallpaper.jpg";
+        String pathtoWallpaper = "src/main/resources/InstructionMenuWallpaper.jpg";
         try
         {
             InstructionMenuImage = ImageIO.read(new File(pathtoWallpaper));
@@ -56,6 +57,10 @@ public class InstructionMenu implements ActionListener {
         frame.setVisible(true);
     }
 
+    /**
+     * draw back button for instruction menu
+     * @param frame <- The original frame used by GameFrame
+     */
     public void drawButton(JFrame frame)
     {
         backbutton = new JButton("Back");
@@ -68,6 +73,11 @@ public class InstructionMenu implements ActionListener {
         frame.add(backbutton);
 
     }
+
+    /**
+     *draw the txtarea in the instruction menu
+     * @param frame <- The original frame used by GameFrame
+     */
     public void drawText(GameFrame frame)
     {
         JTextArea txtarea = new JTextArea();
