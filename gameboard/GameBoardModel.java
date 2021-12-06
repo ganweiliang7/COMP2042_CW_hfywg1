@@ -1,4 +1,8 @@
-package main.java;
+package gameboard;
+
+import score.Score;
+import time.Time;
+import wall.Wall;
 
 import java.awt.*;
 
