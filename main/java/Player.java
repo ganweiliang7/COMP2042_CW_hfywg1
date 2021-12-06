@@ -15,32 +15,31 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package test;
+package main.java;
 
 import java.awt.*;
 
 
 public class Player {
+    PlayerController playerController = new PlayerController();
 
 
     public static final Color BORDER_COLOR = Color.GREEN.darker().darker();
     public static final Color INNER_COLOR = Color.CYAN;
 
-    public static final int DEF_MOVE_AMOUNT = 5;
+
 
     public static Rectangle playerFace;
     public static Point ballPoint;
-    public static int moveAmount;
-    public static int min;
-    public static int max;
+
 
 
     public Player(Point ballPoint,int width,int height,Rectangle container) {
         this.ballPoint = ballPoint;
-        moveAmount = 0;
+        PlayerModel.moveAmount = 0;
         playerFace = makeRectangle(width, height);
-        min = container.x + (width / 2);
-        max = min + container.width - width;
+        PlayerModel.min = container.x + (width / 2);
+        PlayerModel.max = PlayerModel.min + container.width - width;
 
     }
 
@@ -49,14 +48,12 @@ public class Player {
         return  new Rectangle(p,new Dimension(width,height));
     }
 
-    public boolean impact(Ball b){
-        return playerFace.contains(b.getPosition()) && playerFace.contains(Ball.down) ;
-    }
+
 
 
 
     public void stop(){
-        moveAmount = 0;
+        PlayerModel.moveAmount = 0;
     }
 
     public Shape getPlayerFace(){
