@@ -15,13 +15,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package test;
+package main.java;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.font.FontRenderContext;
-import java.util.Random;
 public class GameBoard extends JComponent implements KeyListener, MouseListener, MouseMotionListener
 {
     private static final String CONTINUE = "Continue";
@@ -30,33 +29,20 @@ public class GameBoard extends JComponent implements KeyListener, MouseListener,
     private static final String PAUSE = "Pause Menu";
     private static final int TEXT_SIZE = 30;
     private static final Color MENU_COLOR = new Color(0,255,0);
-
-
     private static final int DEF_WIDTH = 600;
     private static final int DEF_HEIGHT = 450;
-    private double randNum;
-
     private static final Color BG_COLOR = Color.WHITE;
     public static Score score;
-
     public Timer gameTimer;
-    private Time time;
-
+    public Time time;
     public Wall wall;
-
-    private Brick brick;
-    private Random rnd;
-    public String message;
-    private String highScore;
-    private String timeStr;
+    public WallModel wallModel;
+    public static String message;
+    public static String highScore;
+    public static String timeStr;
     public WallController wallController = new WallController();
-    private GameBoardController gameBoardController;
-
-
-    public boolean showPauseMenu;
-
-    private Font menuFont;
-
+    private final GameBoardController gameBoardController;
+    private final Font menuFont;
     public Rectangle continueButtonRect;
     public Rectangle exitButtonRect;
     public Rectangle restartButtonRect;
@@ -65,26 +51,20 @@ public class GameBoard extends JComponent implements KeyListener, MouseListener,
     public DebugConsole debugConsole;
     public GameBoard(JFrame owner){
         super();
-
+        WallController wallController = new WallController();
+        gameBoardController = new GameBoardController();
+        GameBoardModel gameBoardModel = new GameBoardModel();
+        wallModel = new WallModel();
         strLen = 0;
-        showPauseMenu = false;
-
-
-
+        GameBoardModel.showPauseMenu = false;
         menuFont = new Font("Monospaced",Font.PLAIN,TEXT_SIZE);
-
-
         this.initialize();
         message = "";
         highScore="";
         timeStr = "";
-        wall = new Wall(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),30,3,6/2,new Point(300,430));
-        score = new Score();
-        time = new Time();
-        rnd = new Random();
-        WallController wallController = new WallController();
-        gameBoardController = new GameBoardController();
-
+        wall = gameBoardModel.createWall(DEF_HEIGHT,DEF_WIDTH);
+        score = gameBoardModel.createScore();
+        time = gameBoardModel.createTime();
         debugConsole = new DebugConsole(owner,wallController,this);
         //initialize the first level
         wallController.nextLevel();
@@ -92,50 +72,7 @@ public class GameBoard extends JComponent implements KeyListener, MouseListener,
 
         gameTimer = new Timer(10,e ->{
 
-            try {
-                time.starttime();
-            } catch (InterruptedException interruptedException) {
-                interruptedException.printStackTrace();
-            }
-            wallController.move();
-            wallController.findImpacts();
-
-
-            message = String.format("Bricks: %d Balls %d",wall.getBrickCount(),wall.getBallCount());
-            highScore=String.format("HighScore:%d",score.returnScore());
-            timeStr = String.format("Time:%02d:%02d", time.getMinutes(), time.getSeconds());
-
-            if(wall.isBallLost())
-            {
-                if(wall.ballEnd())
-                {
-                    score.addScoretoList(time.getMinutes(),time.getSeconds());
-                    score.writeScore();
-                    score.ScoreReset();
-                    wallController.wallReset();
-                    time.reset();
-                    message = "Game over";
-                }
-                wallController.ballReset();
-                gameTimer.stop();
-            }
-            else if(wall.isDone()){
-                if(wall.hasLevel()){
-                    message = "Go to Next Level";
-                    gameTimer.stop();
-                    wallController.ballReset();
-                    wallController.wallReset();
-                    wallController.nextLevel();
-                }
-                else{
-
-                    score.addScoretoList(time.getMinutes(),time.getSeconds());
-                    score.writeScore();
-                    time.reset();
-                    message = "ALL WALLS DESTROYED";
-                    gameTimer.stop();
-                }
-            }
+           gameBoardController.actionsInGameTimer(wallModel,wallController,score,time,gameTimer);
 
             repaint();
         });
@@ -176,7 +113,7 @@ public class GameBoard extends JComponent implements KeyListener, MouseListener,
 
         drawPlayer(wall.player,g2d);
 
-        if(showPauseMenu)
+        if(GameBoardModel.showPauseMenu)
             drawMenu(g2d);
 
         Toolkit.getDefaultToolkit().sync();
@@ -205,12 +142,12 @@ public class GameBoard extends JComponent implements KeyListener, MouseListener,
     private void drawBall(Ball ball,Graphics2D g2d){
         Color tmp = g2d.getColor();
 
-        Shape s = ball.getBallFace();
+        Shape s = BallModel.getBallFace();
 
-        g2d.setColor(ball.getInnerColor());
+        g2d.setColor(BallModel.getInnerColor());
         g2d.fill(s);
 
-        g2d.setColor(ball.getBorderColor());
+        g2d.setColor(BallModel.getBorderColor());
         g2d.draw(s);
 
         g2d.setColor(tmp);
@@ -249,7 +186,7 @@ public class GameBoard extends JComponent implements KeyListener, MouseListener,
         g2d.setColor(tmpColor);
     }
 
-    private void drawPauseMenu(Graphics2D g2d){
+    public void drawPauseMenu(Graphics2D g2d){
         Font tmpFont = g2d.getFont();
         Color tmpColor = g2d.getColor();
 
@@ -296,6 +233,8 @@ public class GameBoard extends JComponent implements KeyListener, MouseListener,
         }
 
         g2d.drawString(EXIT,x,y);
+        System.out.println(x);
+        System.out.println(y);
 
 
 
