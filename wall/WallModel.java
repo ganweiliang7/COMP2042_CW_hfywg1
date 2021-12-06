@@ -1,4 +1,6 @@
-package main.java;
+package wall;
+
+import bricks.Brick;
 
 public class WallModel {
     public static int level;
