@@ -1,75 +1,63 @@
-package test;
+package score;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-public class Score {
-    ArrayList<Integer> scores = new ArrayList<>();
+public class ScoreController {
 
-    private int totalscore = 0;
+    public Score scoreModel;
+    public ScoreView scoreView;
 
-    public void ScoreReset()
+    public ScoreController(Score model,ScoreView view)
     {
-        totalscore = 0;
+        scoreModel = model;
+        scoreView = view;
     }
 
-    public int returnScore()
-    {
 
 
-        return totalscore;
-    }
+
+    /**
+     * adds the total score calculated to the arraylist
+     * @param minutes <- total minutes used by the player to win/lose the game
+     * @param seconds <- total seconds used by the player to win/lose the game
+     */
     public void addScoretoList(int minutes,int seconds)
     {
         int totalsec = minutes * 60 + seconds;
 
-        totalscore = (int) Math.round(totalscore * (1800 - totalsec) * 0.01);
+        scoreModel.totalscore = (int) Math.round(scoreModel.totalscore * (1800 - totalsec) * 0.01);
 
-        scores.add(totalscore);
+        scoreModel.scores.add(scoreModel.totalscore);
     }
+
+    /**
+     * adds the score to the totalscore everytime a brick is destroyed
+     * @param score <- score from each brick
+     */
     public void incrementScore(int score)
     {
 
-        totalscore += score;
-        System.out.println(totalscore);
-
-    }
-    public void createFile()
-    {
-        File myObj = new File("Score.txt");
+        scoreModel.totalscore += score;
 
 
     }
-    public boolean checkFileExist(String filename)
-    {
-        File temp;
-        try
-        {
-            temp = File.createTempFile(filename, ".txt");
 
-            return temp.exists();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return false;
-
-    }
+    /**
+     * write the score available in the arraylist to the file "score.txt
+     */
     public void writeScore()
     {
-        if(checkFileExist("Score.txt"))
+        if(scoreModel.checkFileExist("Score.txt"))
         {
             try (Scanner scanner = new Scanner(new File("Score.txt")).useDelimiter("\\s*-\\s*"))
             {
-                // \\s* in regular expressions means "any number or whitespaces".
-                // We could've said simply useDelimiter("-") and Scanner would have
-                // included the whitespaces as part of the data it extracted.
+
                 while (scanner.hasNextLine()) {
                     String currLine = scanner.nextLine();
                     if (currLine != null && currLine.trim().length() > 0 && currLine.matches("^[0-9]*$"))
-                        scores.add(Integer.parseInt(currLine));
+                        scoreModel.scores.add(Integer.parseInt(currLine));
                 }
             }
 
@@ -80,11 +68,11 @@ public class Score {
 
 
 
-            Collections.sort(scores,Collections.reverseOrder());
+            Collections.sort(scoreModel.scores,Collections.reverseOrder());
             try
             {
                 Writer wr = new FileWriter("Score.txt");
-                for(Integer score:scores) {
+                for(Integer score:scoreModel.scores) {
                     wr.write(score + System.lineSeparator());
                 }
 
@@ -98,12 +86,12 @@ public class Score {
         }
         else
         {
-            createFile();
+            scoreModel.createFile();
 
             try
             {
                 Writer wr = new FileWriter("Score.txt");
-                for(Integer score:scores)
+                for(Integer score:scoreModel.scores)
                 {
                     wr.write(score + System.lineSeparator());
                 }
@@ -119,8 +107,6 @@ public class Score {
 
 
     }
-
-
 
 
 }
