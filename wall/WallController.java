@@ -1,6 +1,15 @@
-package main.java;
+package wall;
 
+import ball.Ball;
+import ball.BallModel;
+import bricks.Brick;
+import bricks.Crack;
+import gameboard.GameBoard;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 
 public class WallController
 {
@@ -14,7 +23,7 @@ public class WallController
     }
 
     public void resetBallCount(){
-        WallModel.ballCount = 3;
+        WallModel.setBallCount(3);
     }
 
     public void nextLevel()
@@ -22,7 +31,7 @@ public class WallController
 
         Wall.bricks = WallModel.levels[WallModel.level++];
 
-        WallModel.brickCount = Wall.bricks.length;
+        WallModel.setBrickCount(Wall.bricks.length);
         if(WallModel.level == 5)
         {
             Wall.ballController.setSpeed(5,-5); // set the ball speed to be fixed to a higher speed of 5 if level == 5
@@ -33,8 +42,8 @@ public class WallController
     public void wallReset(){
         for(Brick b : Wall.bricks)
             b.repair();
-        WallModel.brickCount = Wall.bricks.length;
-        WallModel.ballCount = 3;
+        WallModel.setBrickCount(Wall.bricks.length);
+        WallModel.setBallCount(3);
     }
 
     /**
@@ -78,7 +87,7 @@ public class WallController
      * find the various type of impacts (e.g. ball impact with the slider, ball impact with the border or ball impact with the bricks and reverse the ball posiiton
      * if no impact,i.e. ball falls below the frame, then decrement ball count
      */
-    public void findImpacts(){
+    public void findImpacts() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         if(Wall.playerController.impact(Wall.ball)){
             Wall.ballController.reverseY();
 
@@ -87,9 +96,9 @@ public class WallController
             /*for efficiency reverse is done into method impactWall
              * because for every brick program checks for horizontal and vertical impacts
              */
-
-            WallModel.brickCount--;
-            GameBoard.score.incrementScore(10);
+            WallModel.brickDestroyedSound();
+            WallModel.decrementBrickCount();
+            GameBoard.scoreController.incrementScore(10);
 
 
         }
@@ -102,8 +111,8 @@ public class WallController
 
         }
         else if(BallModel.getPosition().getY() > Wall.area.getY() + Wall.area.getHeight()){
-            WallModel.ballCount--;
-            WallModel.ballLost = true;
+            WallModel.decrementBallCount();
+            WallModel.setBallLostTrue();
 
         }
     }
@@ -127,7 +136,7 @@ public class WallController
         Wall.ballController.moveTo(Wall.startPoint);
         int speedX,speedY;
 
-        if(WallModel.level == 5)
+        if(WallModel.getLevel() == 5)
         {
             speedX = 5;
             speedY = -5;
@@ -143,7 +152,7 @@ public class WallController
         }
 
         Wall.ballController.setSpeed(speedX,speedY);
-        WallModel.ballLost = false;
+        WallModel.setBallLostFalse();
 
     }
 }

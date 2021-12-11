@@ -15,7 +15,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package main.java;
+package wall;
+
+import ball.Ball;
+import ball.BallController;
+import ball.RubberBall;
+import bricks.Brick;
+import player.Player;
+import player.PlayerController;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -30,8 +37,8 @@ public class Wall {
     public static Rectangle area;
 
 
-    static Brick[] bricks;
-    Player player;
+    public static Brick[] bricks;
+    public Player player;
     Levels lvl = new Levels();
 
 
