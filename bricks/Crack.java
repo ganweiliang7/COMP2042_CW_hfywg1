@@ -95,6 +95,11 @@ public class Crack{
         }
     }
 
+    /**
+     * make crack in cement brick
+     * @param start starting point of the crack
+     * @param end ending point of the crack
+     */
     protected void makeCrack(Point start, Point end){
 
         GeneralPath path = new GeneralPath();
@@ -126,10 +131,24 @@ public class Crack{
         crack.append(path,true);
     }
 
+    /**
+     *
+     * @param bound an integer
+     * @return an integer of how many bound to create in the crack
+     */
+
     private int randomInBounds(int bound){
         int n = (bound * 2) + 1;
         return rnd.nextInt(n) - bound;
     }
+
+    /**
+     *
+     * @param i integer
+     * @param steps integer step
+     * @param divisions integer
+     * @return a boolean that states whether the crack is in middle
+     */
 
     private boolean inMiddle(int i,int steps,int divisions){
         int low = (steps / divisions);
@@ -137,6 +156,13 @@ public class Crack{
 
         return  (i > low) && (i < up);
     }
+
+    /**
+     * number of jumps in the crack
+     * @param bound integer bound
+     * @param probability probability of jump
+     * @return number of jumps
+     */
 
     private int jumps(int bound,double probability){
 
@@ -146,6 +172,13 @@ public class Crack{
 
     }
 
+    /**
+     *
+     * @param from point from
+     * @param to point to
+     * @param direction direction of point
+     * @return a random point for the crack
+     */
     private Point makeRandomPoint(Point from,Point to, int direction){
 
         Point out = new Point();
