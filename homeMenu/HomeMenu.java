@@ -15,7 +15,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package main.java;
+package homeMenu;
+
+import main.java.GameFrame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -40,8 +42,6 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
     private static final String MENU_TEXT = "Exit";
     private static final String HIGHSCORE_TEXT = "High Score";
     private static final String INSTRUCTION_TEXT = "Instruction";
-
-    private static final Color BG_COLOR = Color.BLACK;
     private static final Color BORDER_COLOR = new Color(16,52,166); //Venetian Red
     private static final Color DASH_BORDER_COLOR = new  Color(2, 255, 200);//school bus yellow
     private static final Color TEXT_COLOR = new Color(0,0,0);//egyptian blue
@@ -159,6 +159,11 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         g2d.setColor(prev);
     }
 
+    /**
+     * method to draw all the text in the home menu
+     * @param g2d <- to draw the components
+     */
+
     private void drawText(Graphics2D g2d){
 
         g2d.setColor(TEXT_COLOR);
@@ -192,6 +197,12 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
 
     }
 
+    /**
+     *
+     * method to draw the buttons(start button, exit button, highscore button and instruction button in the home menu
+     * @param g2d <- to draw components
+     */
+
     private void drawButton(Graphics2D g2d){
 
         FontRenderContext frc = g2d.getFontRenderContext();
@@ -216,7 +227,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
 
 
 
-        if(homeMenuController.homeMenuModel.startClicked){
+        if(HomeMenuModel.startClicked){
             Color tmp = g2d.getColor();
             g2d.setColor(CLICKED_BUTTON_COLOR);
             g2d.draw(homeMenuController.homeMenuModel.startButton);
@@ -245,7 +256,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         x += homeMenuController.homeMenuModel.menuButton.x;
         y += homeMenuController.homeMenuModel.menuButton.y + (homeMenuController.homeMenuModel.startButton.height * 0.9);
 
-        if(homeMenuController.homeMenuModel.menuClicked){
+        if(HomeMenuModel.menuClicked){
             Color tmp = g2d.getColor();
 
             g2d.setColor(CLICKED_BUTTON_COLOR);
@@ -281,12 +292,12 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         x += homeMenuController.homeMenuModel.highscoreButton.x;
         y += homeMenuController.homeMenuModel.highscoreButton.y + (homeMenuController.homeMenuModel.menuButton.height * 0.9);
 
-        if(homeMenuController.homeMenuModel.highScoreClicked){
+        if(HomeMenuModel.highScoreClicked){
             Color tmp = g2d.getColor();
             g2d.setColor(CLICKED_BUTTON_COLOR);
             g2d.draw(homeMenuController.homeMenuModel.highscoreButton);
             g2d.setColor(CLICKED_TEXT);
-            g2d.drawString(START_TEXT,x,y);
+            g2d.drawString(HIGHSCORE_TEXT,x,y);
             g2d.setColor(tmp);
         }
         else{
@@ -307,12 +318,12 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         x += homeMenuController.homeMenuModel.InstructionButton.x;
         y += homeMenuController.homeMenuModel.InstructionButton.y + (homeMenuController.homeMenuModel.highscoreButton.height * 0.9);
 
-        if(homeMenuController.homeMenuModel.instructionclicked){
+        if(HomeMenuModel.instructionclicked){
             Color tmp = g2d.getColor();
             g2d.setColor(CLICKED_BUTTON_COLOR);
             g2d.draw(homeMenuController.homeMenuModel.InstructionButton);
             g2d.setColor(CLICKED_TEXT);
-            g2d.drawString(START_TEXT,x,y);
+            g2d.drawString(INSTRUCTION_TEXT,x,y);
             g2d.setColor(tmp);
         }
         else{
