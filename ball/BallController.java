@@ -1,4 +1,4 @@
-package main.java;
+package ball;
 
 import java.awt.*;
 import java.awt.geom.RectangularShape;
@@ -9,15 +9,15 @@ public class BallController {
      */
     public void move(){
         RectangularShape tmp = (RectangularShape) BallModel.ballFace;
-        BallModel.center.setLocation((BallModel.center.getX() + BallModel.speedX),(BallModel.center.getY() + BallModel.speedY));
+        BallModel.setCenterLocation();
         double w = tmp.getWidth();
         double h = tmp.getHeight();
 
-        tmp.setFrame((BallModel.center.getX() -(w / 2)),(BallModel.center.getY() - (h / 2)),w,h);
+        tmp.setFrame((BallModel.getBallCenterX() -(w / 2)),(BallModel.getBallCenterY() - (h / 2)),w,h);
         this.setPoints(w,h);
 
 
-        BallModel.ballFace = tmp;
+        BallModel.setBallFace(tmp);
     }
 
     /**
@@ -36,37 +36,43 @@ public class BallController {
     }
 
     /**
-     * se
+     * set the position of the ball
      * @param width <- width of the ball
      * @param height <- height of the ball
      */
     public void setPoints(double width,double height){
-        Ball.up.setLocation(BallModel.center.getX(), BallModel.center.getY()-(height / 2));
-        Ball.down.setLocation(BallModel.center.getX(), BallModel.center.getY()+(height / 2));
-
-        Ball.left.setLocation(BallModel.center.getX()-(width / 2), BallModel.center.getY());
-        Ball.right.setLocation(BallModel.center.getX()+(width / 2), BallModel.center.getY());
+       BallModel.setBallUpPosition(height);
+       BallModel.setBallDownPosition(height);
+       BallModel.setBallLeftPosition(width);
+       BallModel.setBallRightPosition(width);
     }
 
+
     public void setXSpeed(int s){
-        BallModel.speedX = s;
+        BallModel.setSpeedX(s);
     }
 
     public void setYSpeed(int s){
-        BallModel.speedY = s;
+        BallModel.setSpeedY(s);
     }
 
+    /**
+     * reverse the x speed of the ball
+     */
     public void reverseX(){
-        BallModel.speedX *= -1;
+        BallModel.setReverseX();
     }
 
+    /**
+     * reverse the y speed of the ball
+     */
     public void reverseY(){
-        BallModel.speedY *= -1;
+        BallModel.setReverseY();
     }
 
     public void setSpeed(int x, int y){
 
-        BallModel.speedX = x;
-        BallModel.speedY = y;
+        BallModel.setSpeedX(x);
+        BallModel.setSpeedY(y);
     }
 }

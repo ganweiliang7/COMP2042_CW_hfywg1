@@ -1,13 +1,14 @@
-package main.java;
+package ball;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 
 /**
- * Created by filippo on 04/09/16.
+ *
  *
  */
 abstract public class Ball {
+
 
 
 
@@ -17,9 +18,14 @@ abstract public class Ball {
     public static Point2D left;
     public  static Point2D right;
 
-
-    BallController ballController = new BallController();
-
+    /**
+     * constructor for the ball
+     * @param center (x,y) point of the center of the ball
+     * @param radiusA horizontal radius
+     * @param radiusB vertical radius
+     * @param inner inner colour of the ball
+     * @param border border colour of the ball
+     */
     public Ball(Point2D center,int radiusA,int radiusB,Color inner,Color border){
         BallModel.center = center;
 
@@ -42,6 +48,13 @@ abstract public class Ball {
         BallModel.speedY = 0;
     }
 
+    /**
+     * method to make the ball face
+     * @param center (x,y) coordinateof the center fo the ball
+     * @param radiusA radius of the height of the ball
+     * @param radiusB radius of the width of the ball
+     * @return a shape
+     */
     protected abstract Shape makeBall(Point2D center,int radiusA,int radiusB);
 
 
