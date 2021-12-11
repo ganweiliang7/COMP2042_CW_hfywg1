@@ -8,8 +8,8 @@ import java.util.Random;
 
 public class VibraniumBrick extends Brick{
     private static final String NAME = "Vibranium Brick";
-    private static final Color DEF_INNER = new Color(0, 20, 255);
-    private static final Color DEF_BORDER = Color.WHITE;
+    private static final Color DEF_INNER = new Color(0, 0, 100);
+    private static final Color DEF_BORDER = new Color(0,150,200);
     private static final int STEEL_STRENGTH = 1;
     private static final double STEEL_PROBABILITY = 0.2;
 
